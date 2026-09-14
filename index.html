@@ -739,9 +739,10 @@
 1. 准确识别截图中的文字和数字，尽可能完整。
 2. 不要修改、猜测或补全截图中没有的数据；无法确认的字段用 null。
 3. 历史净值表必须逐行提取日期、单位净值和涨跌幅，数字精度与截图一致，不要用涨跌幅反推净值。
-4. 累计净值和涨跌幅只原样记录。
-5. 不要返回任何分析描述、报告、结论或比较文字。
-6. 严格返回 JSON，不要使用 Markdown，不要使用 \`\`\`json。
+4. 截图里周末/节假日后合并成一行的日期，必须按截图原样提取，不要自行拆成周六日或其他日期，也不要补全截图中没有的净值。
+5. 累计净值和涨跌幅只原样记录。
+6. 不要返回任何分析描述、报告、结论或比较文字。
+7. 严格返回 JSON，不要使用 Markdown，不要使用 \`\`\`json。
 JSON 格式：
 {
   "source": {
@@ -992,6 +993,11 @@ JSON 格式：
             next.setDate(next.getDate() + days);
             return next;
         }
+        function isWeekend(date) {
+            const day =
+                date.getDay();
+            return day === 0 || day === 6;
+        }
         function daysBetween(start, end) {
             const a =
                 new Date(
@@ -1048,10 +1054,14 @@ JSON 格式：
                 if (days <= 0) {
                     continue;
                 }
-                dailyIncomeByDate.set(
-                    dateKey(curr.date),
-                    (curr.nav - prev.nav) * 10000 / days
-                );
+                const avgIncome =
+                    (curr.nav - prev.nav) * 10000 / days;
+                for (let d = 1; d <= days; d++) {
+                    dailyIncomeByDate.set(
+                        dateKey(addDays(prev.date, d)),
+                        avgIncome
+                    );
+                }
             }
             const latest =
                 series[series.length - 1];
@@ -1093,6 +1103,45 @@ JSON 格式：
                     ) * 100
             };
         }
+        function expandHolidayRows(rows) {
+            const items = [];
+            rows.forEach(row => {
+                const date =
+                    parseDate(row?.date || row?.日期);
+                if (!date) {
+                    return;
+                }
+                items.push({ row, date });
+            });
+            items.sort((a, b) => a.date - b.date);
+            const expanded = [];
+            items.forEach((item, index) => {
+                if (index > 0) {
+                    const prev =
+                        items[index - 1];
+                    const gap =
+                        daysBetween(prev.date, item.date);
+                    for (let d = 1; d < gap; d++) {
+                        const day =
+                            addDays(prev.date, d);
+                        expanded.push({
+                            date: dateKey(day),
+                            unit_nav: "",
+                            accumulated_nav: "",
+                            nav_growth_rate: "",
+                            涨跌幅: "",
+                            _unpublished: true,
+                            _weekend: isWeekend(day)
+                        });
+                    }
+                }
+                expanded.push({
+                    ...item.row,
+                    date: dateKey(item.date)
+                });
+            });
+            return expanded;
+        }
         function renderHistoryTable(allData, navCalc) {
             const section =
                 document.getElementById("historySection");
@@ -1103,9 +1152,11 @@ JSON 格式：
             const body =
                 document.getElementById("historyBody");
             const rows =
-                Array.isArray(allData?.historical_data)
-                    ? allData.historical_data
-                    : [];
+                expandHolidayRows(
+                    Array.isArray(allData?.historical_data)
+                        ? allData.historical_data
+                        : []
+                );
             if (!rows.length) {
                 if (section) {
                     section.style.display =
@@ -1187,9 +1238,24 @@ JSON 格式：
                         const cells =
                             keys
                                 .slice(0, headers.length - 1)
-                                .map((keyName, index) =>
-                                    `<td>${escapeHTML(pickTableCell(row, keyName, headers[index]))}</td>`
-                                )
+                                .map((keyName, index) => {
+                                    const header =
+                                        headers[index];
+                                    let text =
+                                        pickTableCell(row, keyName, header);
+                                    if (
+                                        row?._unpublished &&
+                                        header !== "日期" &&
+                                        (
+                                            text === "" ||
+                                            text === null ||
+                                            text === undefined
+                                        )
+                                    ) {
+                                        text = "—";
+                                    }
+                                    return `<td>${escapeHTML(text)}</td>`;
+                                })
                                 .join("");
                         const bar =
                             incomeBarStyle(rawIncome);
