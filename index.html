@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="theme-color" content="#c41a2b">
+    <link rel="icon" href="favicon.png" type="image/x-icon">
     <title>招商理财助手</title>
     <style>
         * {
@@ -371,13 +372,18 @@
         }
 
         .history-table tbody tr.income-full td {
-            background-color: #dcfce7;
+            background-color: #a7f3d0;
         }
 
         .history-table tbody tr.income-bar {
             background-image: linear-gradient(to right,
                     #dcfce7 var(--bar),
                     #ffffff var(--bar));
+        }
+
+        .history-table td.rate-pos {
+            color: var(--primary);
+            font-weight: 700;
         }
 
         /* Raw data */
@@ -496,7 +502,8 @@
     <div class="container">
         <header class="header">
             <div class="brand">
-                <div class="logo">招</div>
+                <!-- <div class="logo">招</div> -->
+                <img src="logo.png" alt="招商理财助手" class="logo">
                 <div>
                     <div class="brand-title">招商理财助手</div>
                     <div class="brand-subtitle">截图识别 · 收益分析 · 每万元每日收益</div>
@@ -569,7 +576,7 @@
                 <!-- 历史净值 -->
                 <div id="historySection">
                     <div class="section-title">
-                        历史净值
+                        历史净值透视
                     </div>
                     <div class="report-card" id="reportCard">
                         <div class="report-inner">
@@ -1254,7 +1261,24 @@ JSON 格式：
                                     ) {
                                         text = "—";
                                     }
-                                    return `<td>${escapeHTML(text)}</td>`;
+                                    let cellCls = "";
+                                    if (
+                                        keyName === "nav_growth_rate" ||
+                                        header === "涨跌幅"
+                                    ) {
+                                        const rateNum =
+                                            Number(
+                                                String(text)
+                                                    .replace(/[%,\s]/g, "")
+                                            );
+                                        if (
+                                            Number.isFinite(rateNum) &&
+                                            rateNum > 0
+                                        ) {
+                                            cellCls = ' class="rate-pos"';
+                                        }
+                                    }
+                                    return `<td${cellCls}>${escapeHTML(text)}</td>`;
                                 })
                                 .join("");
                         const bar =
