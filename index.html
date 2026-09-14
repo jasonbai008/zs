@@ -1,939 +1,740 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta name="theme-color" content="#c41a2b">
-<title>招商理财助手</title>
-
-<style>
-* {
-    box-sizing: border-box;
-}
-
-:root {
-    --bg: #f8f4f4;
-    --card: #ffffff;
-    --text: #1a1414;
-    --muted: #7a6a6a;
-    --primary: #c41a2b;
-    --primary-dark: #9b1522;
-    --primary-light: #fff1f0;
-    --border: #efe4e4;
-    --green: #059669;
-    --green-bg: #ecfdf5;
-    --orange: #ea580c;
-    --orange-bg: #fff7ed;
-    --shadow: 0 12px 40px rgba(196, 26, 43, .08);
-}
-
-body {
-    margin: 0;
-    background:
-        radial-gradient(circle at 10% 0%, #fff1f0 0, transparent 32%),
-        radial-gradient(circle at 90% 10%, #ffe4e6 0, transparent 28%),
-        var(--bg);
-    color: var(--text);
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        "PingFang SC",
-        "Microsoft YaHei",
-        sans-serif;
-}
-
-button,
-input {
-    font: inherit;
-}
-
-button {
-    cursor: pointer;
-}
-
-.container {
-    width: min(1100px, calc(100% - 32px));
-    margin: 0 auto;
-}
-
-/* Header */
-
-.header {
-    padding: 42px 0 24px;
-}
-
-.brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.logo {
-    width: 46px;
-    height: 46px;
-    border-radius: 14px;
-    display: grid;
-    place-items: center;
-    color: white;
-    font-size: 22px;
-    font-weight: 800;
-    background: linear-gradient(135deg, #c41a2b, #e31c3d);
-    box-shadow: 0 8px 22px rgba(196, 26, 43, .28);
-}
-
-.brand-title {
-    font-size: 21px;
-    font-weight: 800;
-}
-
-.brand-subtitle {
-    margin-top: 3px;
-    color: var(--muted);
-    font-size: 13px;
-}
-
-/* Main */
-
-.upload-card {
-    background: rgba(255,255,255,.92);
-    border: 1px solid rgba(255,255,255,.8);
-    border-radius: 24px;
-    box-shadow: var(--shadow);
-    padding: 28px;
-}
-
-.upload-area {
-    border: 2px dashed #e8cfd2;
-    border-radius: 20px;
-    min-height: 260px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    transition: .2s;
-    background: linear-gradient(180deg, #fffafa, #fff);
-}
-
-.upload-area.dragover {
-    border-color: var(--primary);
-    background: var(--primary-light);
-}
-
-.upload-content {
-    padding: 30px 20px;
-}
-
-.upload-icon {
-    width: 68px;
-    height: 68px;
-    border-radius: 20px;
-    background: var(--primary-light);
-    color: var(--primary);
-    display: grid;
-    place-items: center;
-    font-size: 30px;
-    margin: 0 auto 18px;
-}
-
-.upload-title {
-    font-size: 20px;
-    font-weight: 700;
-}
-
-.upload-desc {
-    color: var(--muted);
-    margin: 9px 0 20px;
-    font-size: 14px;
-}
-
-.primary-btn {
-    border: 0;
-    color: white;
-    background: linear-gradient(135deg, #c41a2b, #e31c3d);
-    border-radius: 12px;
-    padding: 12px 22px;
-    font-weight: 700;
-    box-shadow: 0 7px 18px rgba(196, 26, 43, .25);
-}
-
-.primary-btn:hover {
-    transform: translateY(-1px);
-}
-
-.secondary-btn {
-    border: 1px solid var(--border);
-    background: white;
-    color: var(--text);
-    border-radius: 10px;
-    padding: 9px 15px;
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-#fileInput {
-    display: none;
-}
-
-.preview {
-    display: none;
-    margin-top: 20px;
-}
-
-.preview img {
-    display: block;
-    width: 100%;
-    max-height: 420px;
-    object-fit: contain;
-    border-radius: 16px;
-    background: #faf6f6;
-    border: 1px solid var(--border);
-}
-
-.preview-actions {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 14px;
-    gap: 12px;
-    flex-wrap: nowrap;
-}
-
-.file-name {
-    flex: 1;
-    min-width: 0;
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.4;
-    word-break: break-all;
-}
-
-/* Analyze button */
-
-.analyze-row {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-}
-
-.analyze-btn {
-    width: 100%;
-    max-width: 360px;
-    padding: 15px 20px;
-    font-size: 16px;
-}
-
-/* Loading */
-
-.loading {
-    display: none;
-    margin-top: 20px;
-    padding: 18px;
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    text-align: center;
-}
-
-.spinner {
-    width: 24px;
-    height: 24px;
-    margin: 0 auto 10px;
-    border: 3px solid #e5e7eb;
-    border-top-color: var(--primary);
-    border-radius: 50%;
-    animation: spin .8s linear infinite;
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/* Result */
-
-.result {
-    display: none;
-    margin: 24px 0 50px;
-}
-
-.section-title {
-    font-size: 18px;
-    font-weight: 800;
-    margin: 26px 0 14px;
-}
-
-/* Rate cards */
-
-.rate-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-}
-
-.rate-card {
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: white;
-    border-radius: 20px;
-    padding: 20px 22px;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-}
-
-.rate-card:first-child {
-    background: linear-gradient(135deg, #ffffff, #fff1f0);
-}
-
-.rate-card:nth-child(2) {
-    background: linear-gradient(135deg, #ffffff, #ecfdf5);
-}
-
-.rate-label {
-    color: var(--text);
-    font-size: 14px;
-    font-weight: 700;
-    flex-shrink: 0;
-}
-
-.rate-value {
-    flex: 1;
-    margin: 0;
-    font-size: 42px;
-    line-height: 1;
-    font-weight: 850;
-    letter-spacing: -1px;
-    text-align: center;
-}
-
-.rate-card:first-child .rate-value {
-    color: var(--primary);
-}
-
-.rate-card:nth-child(2) .rate-value {
-    color: var(--green);
-}
-
-/* Report */
-
-.report-card {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 22px;
-    box-shadow: var(--shadow);
-    overflow: hidden;
-}
-
-.report-inner {
-    padding: 20px;
-}
-
-.history-card {
-    margin-top: 0;
-}
-
-.history-table-wrap {
-    overflow: auto;
-    border: 1px solid var(--border);
-    border-radius: 14px;
-}
-
-.history-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    font-size: 13px;
-}
-
-.history-table th,
-.history-table td {
-    padding: 10px 12px;
-    text-align: left;
-    border-bottom: 1px solid var(--border);
-    white-space: nowrap;
-    background-color: transparent;
-}
-
-.history-table th {
-    background: #faf6f6;
-    color: var(--muted);
-    font-weight: 700;
-}
-
-.history-table tr:last-child td {
-    border-bottom: 0;
-}
-
-.history-table .num {
-    text-align: left;
-    font-variant-numeric: tabular-nums;
-}
-
-.history-table tbody tr {
-    background-color: #fff;
-}
-
-.history-table tbody tr.income-full td {
-    background-color: #dcfce7;
-}
-
-.history-table tbody tr.income-bar {
-    background-image: linear-gradient(
-        to right,
-        #dcfce7 var(--bar),
-        #ffffff var(--bar)
-    );
-}
-
-/* Raw data */
-
-.raw-card {
-    margin-top: 20px;
-    background: #2a1418;
-    border-radius: 18px;
-    overflow: hidden;
-}
-
-.raw-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 18px;
-    color: white;
-}
-
-.raw-title {
-    font-weight: 700;
-}
-
-.raw-copy {
-    border: 0;
-    background: rgba(255,255,255,.1);
-    color: white;
-    border-radius: 8px;
-    padding: 6px 10px;
-    font-size: 12px;
-}
-
-pre {
-    margin: 0;
-    padding: 20px;
-    max-height: 500px;
-    overflow: auto;
-    color: #ffe8ea;
-    font-size: 12px;
-    line-height: 1.7;
-    white-space: pre-wrap;
-    word-break: break-word;
-}
-
-/* Footer */
-
-.footer {
-    text-align: center;
-    color: #9aa4b2;
-    font-size: 12px;
-    padding: 10px 0 40px;
-}
-
-/* Error */
-
-.error {
-    display: none;
-    margin-top: 15px;
-    padding: 14px 16px;
-    color: #b91c1c;
-    background: #fef2f2;
-    border: 1px solid #fecaca;
-    border-radius: 12px;
-    font-size: 14px;
-}
-
-/* Mobile */
-
-@media (max-width: 680px) {
-
-    .container {
-        width: min(100% - 20px, 1100px);
-    }
-
-    .header {
-        padding: 24px 0 16px;
-    }
-
-    .upload-card {
-        padding: 14px;
-        border-radius: 18px;
-    }
-
-    .upload-area {
-        min-height: 230px;
-    }
-
-    .preview-actions {
-        gap: 8px;
-    }
-
-    .preview-actions .secondary-btn {
-        padding: 9px 12px;
-    }
-
-    .rate-grid {
-        gap: 10px;
-    }
-
-    .rate-card {
-        padding: 14px 12px;
-        border-radius: 16px;
-    }
-
-    .rate-label {
-        font-size: 13px;
-    }
-
-    .rate-value {
-        font-size: 30px;
-    }
-
-    .report-inner {
-        padding: 14px;
-    }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="theme-color" content="#c41a2b">
+    <title>招商理财助手</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #f8f4f4;
+            --card: #ffffff;
+            --text: #1a1414;
+            --muted: #7a6a6a;
+            --primary: #c41a2b;
+            --primary-dark: #9b1522;
+            --primary-light: #fff1f0;
+            --border: #efe4e4;
+            --green: #059669;
+            --green-bg: #ecfdf5;
+            --orange: #ea580c;
+            --orange-bg: #fff7ed;
+            --shadow: 0 12px 40px rgba(196, 26, 43, .08);
+        }
+
+        body {
+            margin: 0;
+            background:
+                radial-gradient(circle at 10% 0%, #fff1f0 0, transparent 32%),
+                radial-gradient(circle at 90% 10%, #ffe4e6 0, transparent 28%),
+                var(--bg);
+            color: var(--text);
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                "PingFang SC",
+                "Microsoft YaHei",
+                sans-serif;
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .container {
+            width: min(1100px, calc(100% - 32px));
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            padding: 42px 0 24px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            color: white;
+            font-size: 22px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #c41a2b, #e31c3d);
+            box-shadow: 0 8px 22px rgba(196, 26, 43, .28);
+        }
+
+        .brand-title {
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .brand-subtitle {
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* Main */
+        .upload-card {
+            background: rgba(255, 255, 255, .92);
+            border: 1px solid rgba(255, 255, 255, .8);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            padding: 28px;
+        }
+
+        .upload-area {
+            border: 2px dashed #e8cfd2;
+            border-radius: 20px;
+            min-height: 260px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: .2s;
+            background: linear-gradient(180deg, #fffafa, #fff);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .upload-content {
+            padding: 30px 20px;
+        }
+
+        .upload-icon {
+            width: 68px;
+            height: 68px;
+            border-radius: 20px;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: grid;
+            place-items: center;
+            font-size: 30px;
+            margin: 0 auto 18px;
+        }
+
+        .upload-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .upload-desc {
+            color: var(--muted);
+            margin: 9px 0 20px;
+            font-size: 14px;
+        }
+
+        .primary-btn {
+            border: 0;
+            color: white;
+            background: linear-gradient(135deg, #c41a2b, #e31c3d);
+            border-radius: 12px;
+            padding: 12px 22px;
+            font-weight: 700;
+            box-shadow: 0 7px 18px rgba(196, 26, 43, .25);
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .secondary-btn {
+            border: 1px solid var(--border);
+            background: white;
+            color: var(--text);
+            border-radius: 10px;
+            padding: 9px 15px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .preview {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .preview img {
+            display: block;
+            width: 100%;
+            max-height: 420px;
+            object-fit: contain;
+            border-radius: 16px;
+            background: #faf6f6;
+            border: 1px solid var(--border);
+        }
+
+        .preview-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 14px;
+            gap: 12px;
+            flex-wrap: nowrap;
+        }
+
+        .file-name {
+            flex: 1;
+            min-width: 0;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.4;
+            word-break: break-all;
+        }
+
+        /* Analyze button */
+        .analyze-row {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .analyze-btn {
+            width: 100%;
+            max-width: 360px;
+            padding: 15px 20px;
+            font-size: 16px;
+        }
+
+        /* Loading */
+        .loading {
+            display: none;
+            margin-top: 20px;
+            padding: 18px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .spinner {
+            width: 24px;
+            height: 24px;
+            margin: 0 auto 10px;
+            border: 3px solid #e5e7eb;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin .8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Result */
+        .result {
+            display: none;
+            margin: 24px 0 50px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 800;
+            margin: 26px 0 14px;
+        }
+
+        /* Rate cards */
+        .rate-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .rate-card {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            border-radius: 20px;
+            padding: 20px 22px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .rate-card:first-child {
+            background: linear-gradient(135deg, #ffffff, #fff1f0);
+        }
+
+        .rate-card:nth-child(2) {
+            background: linear-gradient(135deg, #ffffff, #ecfdf5);
+        }
+
+        .rate-label {
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .rate-value {
+            flex: 1;
+            margin: 0;
+            font-size: 42px;
+            line-height: 1;
+            font-weight: 850;
+            letter-spacing: -1px;
+            text-align: center;
+        }
+
+        .rate-card:first-child .rate-value {
+            color: var(--primary);
+        }
+
+        .rate-card:nth-child(2) .rate-value {
+            color: var(--green);
+        }
+
+        /* Report */
+        .report-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .report-inner {
+            padding: 20px;
+        }
+
+        .history-card {
+            margin-top: 0;
+        }
+
+        .history-table-wrap {
+            overflow: auto;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 13px;
+        }
+
+        .history-table th,
+        .history-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+            background-color: transparent;
+        }
+
+        .history-table th {
+            background: #faf6f6;
+            color: var(--muted);
+            font-weight: 700;
+        }
+
+        .history-table tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .history-table .num {
+            text-align: left;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .history-table tbody tr {
+            background-color: #fff;
+        }
+
+        .history-table tbody tr.income-full td {
+            background-color: #dcfce7;
+        }
+
+        .history-table tbody tr.income-bar {
+            background-image: linear-gradient(to right,
+                    #dcfce7 var(--bar),
+                    #ffffff var(--bar));
+        }
+
+        /* Raw data */
+        .raw-card {
+            margin-top: 20px;
+            background: #2a1418;
+            border-radius: 18px;
+            overflow: hidden;
+        }
+
+        .raw-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px;
+            color: white;
+        }
+
+        .raw-title {
+            font-weight: 700;
+        }
+
+        .raw-copy {
+            border: 0;
+            background: rgba(255, 255, 255, .1);
+            color: white;
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: 12px;
+        }
+
+        pre {
+            margin: 0;
+            padding: 20px;
+            max-height: 500px;
+            overflow: auto;
+            color: #ffe8ea;
+            font-size: 12px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: #9aa4b2;
+            font-size: 12px;
+            padding: 10px 0 40px;
+        }
+
+        /* Error */
+        .error {
+            display: none;
+            margin-top: 15px;
+            padding: 14px 16px;
+            color: #b91c1c;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+
+        /* Mobile */
+        @media (max-width: 680px) {
+            .container {
+                width: min(100% - 20px, 1100px);
+            }
+
+            .header {
+                padding: 24px 0 16px;
+            }
+
+            .upload-card {
+                padding: 14px;
+                border-radius: 18px;
+            }
+
+            .upload-area {
+                min-height: 230px;
+            }
+
+            .preview-actions {
+                gap: 8px;
+            }
+
+            .preview-actions .secondary-btn {
+                padding: 9px 12px;
+            }
+
+            .rate-grid {
+                gap: 10px;
+            }
+
+            .rate-card {
+                padding: 14px 12px;
+                border-radius: 16px;
+            }
+
+            .rate-label {
+                font-size: 13px;
+            }
+
+            .rate-value {
+                font-size: 30px;
+            }
+
+            .report-inner {
+                padding: 14px;
+            }
+        }
+    </style>
 </head>
 
 <body>
-
-<div class="container">
-
-    <header class="header">
-        <div class="brand">
-            <div class="logo">招</div>
-            <div>
-                <div class="brand-title">招商理财助手</div>
-                <div class="brand-subtitle">截图识别 · 收益分析 · 每万元每日收益</div>
-            </div>
-        </div>
-    </header>
-
-    <main>
-
-        <!-- 上传区域 -->
-        <section class="upload-card">
-
-            <div
-                id="uploadArea"
-                class="upload-area"
-            >
-                <div class="upload-content">
-
-                    <div class="upload-icon">↑</div>
-
-                    <div class="upload-title">
-                        上传收益率截图
-                    </div>
-
-                    <div class="upload-desc">
-                        PC 可拖拽图片，手机可直接选择相册图片
-                    </div>
-
-                    <button
-                        class="primary-btn"
-                        id="selectBtn"
-                    >
-                        选择图片
-                    </button>
-
-                    <input
-                        type="file"
-                        id="fileInput"
-                        accept="image/png,image/jpeg,image/webp"
-                    >
-
-                </div>
-            </div>
-
-            <div class="preview" id="preview">
-
-                <img id="previewImage" alt="截图预览">
-
-                <div class="preview-actions">
-
-                    <div
-                        class="file-name"
-                        id="fileName"
-                    ></div>
-
-                    <button
-                        class="secondary-btn"
-                        id="changeBtn"
-                    >
-                        更换图片
-                    </button>
-
-                </div>
-
-            </div>
-
-            <div class="analyze-row">
-
-                <button
-                    class="primary-btn analyze-btn"
-                    id="analyzeBtn"
-                    disabled
-                >
-                    开始识别并分析
-                </button>
-
-            </div>
-
-            <div class="loading" id="loading">
-
-                <div class="spinner"></div>
-
+    <div class="container">
+        <header class="header">
+            <div class="brand">
+                <div class="logo">招</div>
                 <div>
-                    正在识别截图并生成分析报告…
+                    <div class="brand-title">招商理财助手</div>
+                    <div class="brand-subtitle">截图识别 · 收益分析 · 每万元每日收益</div>
                 </div>
-
             </div>
-
-            <div class="error" id="error"></div>
-
-        </section>
-
-
-        <!-- 分析结果 -->
-        <section
-            class="result"
-            id="result"
-        >
-
-            <div class="section-title">
-                近期收益率
-            </div>
-
-            <div class="rate-grid">
-
-                <div class="rate-card">
-
-                    <div class="rate-label" id="rate1Label">
-                        最近7天
-                    </div>
-
-                    <div
-                        class="rate-value"
-                        id="rate1"
-                    >
-                        --
-                    </div>
-
-                </div>
-
-                <div class="rate-card">
-
-                    <div class="rate-label" id="rate2Label">
-                        最近14天
-                    </div>
-
-                    <div
-                        class="rate-value"
-                        id="rate2"
-                    >
-                        --
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- 历史净值 -->
-            <div id="historySection">
-
-            <div class="section-title">
-                历史净值
-            </div>
-
-            <div
-                class="report-card"
-                id="reportCard"
-            >
-
-                <div class="report-inner">
-
-                    <div
-                        class="history-card"
-                        id="historyCard"
-                        style="display:none"
-                    >
-
-                        <div class="history-table-wrap">
-                            <table class="history-table">
-                                <thead id="historyHead"></thead>
-                                <tbody id="historyBody"></tbody>
-                            </table>
+        </header>
+        <main>
+            <!-- 上传区域 -->
+            <section class="upload-card">
+                <div id="uploadArea" class="upload-area">
+                    <div class="upload-content">
+                        <div class="upload-icon">↑</div>
+                        <div class="upload-title">
+                            上传收益率截图
                         </div>
-
+                        <div class="upload-desc">
+                            PC 可拖拽图片，手机可直接选择相册图片
+                        </div>
+                        <button class="primary-btn" id="selectBtn">
+                            选择图片
+                        </button>
+                        <input type="file" id="fileInput" accept="image/png,image/jpeg,image/webp">
                     </div>
-
                 </div>
-
-            </div>
-
-            </div>
-
-
-            <!-- 完整原始数据 -->
-            <div class="section-title">
-                完整识别数据
-            </div>
-
-            <div class="raw-card">
-
-                <div class="raw-header">
-
-                    <div class="raw-title">
-                        Gemini 原始结构化数据
+                <div class="preview" id="preview">
+                    <img id="previewImage" alt="截图预览">
+                    <div class="preview-actions">
+                        <div class="file-name" id="fileName"></div>
+                        <button class="secondary-btn" id="changeBtn">
+                            更换图片
+                        </button>
                     </div>
-
-                    <button
-                        class="raw-copy"
-                        id="copyBtn"
-                    >
-                        复制 JSON
+                </div>
+                <div class="analyze-row">
+                    <button class="primary-btn analyze-btn" id="analyzeBtn" disabled>
+                        开始识别并分析
                     </button>
-
                 </div>
-
-                <pre id="rawData"></pre>
-
-            </div>
-
-        </section>
-
-    </main>
-
-
-    <footer class="footer">
-        Gemini Vision · 本地图片处理 · 数据仅用于本次分析
-    </footer>
-
-</div>
-
-
-<script>
-
-const API_URL =
-    "https://freeapi.jasonbai.dpdns.org/v1/chat/completions";
-
-const MODEL =
-    "gemini-3.5-flash-lite";
-
-
-const fileInput =
-    document.getElementById("fileInput");
-
-const selectBtn =
-    document.getElementById("selectBtn");
-
-const changeBtn =
-    document.getElementById("changeBtn");
-
-const uploadArea =
-    document.getElementById("uploadArea");
-
-const preview =
-    document.getElementById("preview");
-
-const previewImage =
-    document.getElementById("previewImage");
-
-const fileName =
-    document.getElementById("fileName");
-
-const analyzeBtn =
-    document.getElementById("analyzeBtn");
-
-const loading =
-    document.getElementById("loading");
-
-const errorBox =
-    document.getElementById("error");
-
-const result =
-    document.getElementById("result");
-
-let selectedFile = null;
-let imageDataUrl = null;
-let latestResult = null;
-
-
-/* =========================
-   图片选择
-========================= */
-
-selectBtn.addEventListener("click", () => {
-    fileInput.click();
-});
-
-changeBtn.addEventListener("click", () => {
-    fileInput.click();
-});
-
-fileInput.addEventListener("change", event => {
-
-    const file =
-        event.target.files?.[0];
-
-    if (file) {
-        handleFile(file);
-    }
-});
-
-
-/* =========================
-   拖拽上传
-========================= */
-
-uploadArea.addEventListener("dragover", event => {
-
-    event.preventDefault();
-
-    uploadArea.classList.add("dragover");
-
-});
-
-uploadArea.addEventListener("dragleave", () => {
-
-    uploadArea.classList.remove("dragover");
-
-});
-
-uploadArea.addEventListener("drop", event => {
-
-    event.preventDefault();
-
-    uploadArea.classList.remove("dragover");
-
-    const file =
-        event.dataTransfer.files?.[0];
-
-    if (file) {
-        handleFile(file);
-    }
-
-});
-
-
-/* =========================
-   读取图片
-========================= */
-
-function handleFile(file) {
-
-    if (!file.type.startsWith("image/")) {
-
-        showError("请选择 PNG、JPG 或 WEBP 图片。");
-
-        return;
-    }
-
-    selectedFile = file;
-
-    fileName.textContent = file.name;
-
-    const reader =
-        new FileReader();
-
-    reader.onload = event => {
-
-        imageDataUrl =
-            event.target.result;
-
-        previewImage.src =
-            imageDataUrl;
-
-        uploadArea.style.display =
-            "none";
-
-        preview.style.display =
-            "block";
-
-        analyzeBtn.disabled =
-            false;
-
-        hideError();
-
-        result.style.display =
-            "none";
-    };
-
-    reader.readAsDataURL(file);
-}
-
-
-/* =========================
-   开始分析
-========================= */
-
-analyzeBtn.addEventListener(
-    "click",
-    analyzeImage
-);
-
-
-async function analyzeImage() {
-
-    if (!imageDataUrl) {
-
-        showError("请先上传截图。");
-
-        return;
-    }
-
-    setLoading(true);
-    hideError();
-
-    try {
-
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <div>
+                        正在识别截图并生成分析报告…
+                    </div>
+                </div>
+                <div class="error" id="error"></div>
+            </section>
+            <!-- 分析结果 -->
+            <section class="result" id="result">
+                <div class="section-title">
+                    近期收益率
+                </div>
+                <div class="rate-grid">
+                    <div class="rate-card">
+                        <div class="rate-label" id="rate1Label">
+                            最近7天
+                        </div>
+                        <div class="rate-value" id="rate1">
+                            --
+                        </div>
+                    </div>
+                    <div class="rate-card">
+                        <div class="rate-label" id="rate2Label">
+                            最近14天
+                        </div>
+                        <div class="rate-value" id="rate2">
+                            --
+                        </div>
+                    </div>
+                </div>
+                <!-- 历史净值 -->
+                <div id="historySection">
+                    <div class="section-title">
+                        历史净值
+                    </div>
+                    <div class="report-card" id="reportCard">
+                        <div class="report-inner">
+                            <div class="history-card" id="historyCard" style="display:none">
+                                <div class="history-table-wrap">
+                                    <table class="history-table">
+                                        <thead id="historyHead"></thead>
+                                        <tbody id="historyBody"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 完整原始数据 -->
+                <div class="section-title">
+                    完整识别数据
+                </div>
+                <div class="raw-card">
+                    <div class="raw-header">
+                        <div class="raw-title">
+                            Gemini 原始结构化数据
+                        </div>
+                        <button class="raw-copy" id="copyBtn">
+                            复制 JSON
+                        </button>
+                    </div>
+                    <pre id="rawData"></pre>
+                </div>
+            </section>
+        </main>
+        <footer class="footer">
+            Gemini Vision · 本地图片处理 · 数据仅用于本次分析
+        </footer>
+    </div>
+    <script>
+        const API_URL =
+            "https://freeapi.jasonbai.dpdns.org/v1/chat/completions";
+        const MODEL =
+            "gemini-3.5-flash-lite";
+        const fileInput =
+            document.getElementById("fileInput");
+        const selectBtn =
+            document.getElementById("selectBtn");
+        const changeBtn =
+            document.getElementById("changeBtn");
+        const uploadArea =
+            document.getElementById("uploadArea");
+        const preview =
+            document.getElementById("preview");
+        const previewImage =
+            document.getElementById("previewImage");
+        const fileName =
+            document.getElementById("fileName");
+        const analyzeBtn =
+            document.getElementById("analyzeBtn");
+        const loading =
+            document.getElementById("loading");
+        const errorBox =
+            document.getElementById("error");
         const result =
-            await callGemini(imageDataUrl);
-
-        latestResult =
-            result;
-
-        renderResult(result);
-
-    } catch (error) {
-
-        console.error(error);
-
-        showError(
-            "识别失败：" +
-            (error.message || "未知错误")
+            document.getElementById("result");
+        let selectedFile = null;
+        let imageDataUrl = null;
+        let latestResult = null;
+        /* =========================
+           图片选择
+        ========================= */
+        selectBtn.addEventListener("click", () => {
+            fileInput.click();
+        });
+        changeBtn.addEventListener("click", () => {
+            fileInput.click();
+        });
+        fileInput.addEventListener("change", event => {
+            const file =
+                event.target.files?.[0];
+            if (file) {
+                handleFile(file);
+            }
+        });
+        /* =========================
+           拖拽上传
+        ========================= */
+        uploadArea.addEventListener("dragover", event => {
+            event.preventDefault();
+            uploadArea.classList.add("dragover");
+        });
+        uploadArea.addEventListener("dragleave", () => {
+            uploadArea.classList.remove("dragover");
+        });
+        uploadArea.addEventListener("drop", event => {
+            event.preventDefault();
+            uploadArea.classList.remove("dragover");
+            const file =
+                event.dataTransfer.files?.[0];
+            if (file) {
+                handleFile(file);
+            }
+        });
+        /* =========================
+           读取图片
+        ========================= */
+        function handleFile(file) {
+            if (!file.type.startsWith("image/")) {
+                showError("请选择 PNG、JPG 或 WEBP 图片。");
+                return;
+            }
+            selectedFile = file;
+            fileName.textContent = file.name;
+            const reader =
+                new FileReader();
+            reader.onload = event => {
+                imageDataUrl =
+                    event.target.result;
+                previewImage.src =
+                    imageDataUrl;
+                uploadArea.style.display =
+                    "none";
+                preview.style.display =
+                    "block";
+                analyzeBtn.disabled =
+                    false;
+                hideError();
+                result.style.display =
+                    "none";
+            };
+            reader.readAsDataURL(file);
+        }
+        /* =========================
+           开始分析
+        ========================= */
+        analyzeBtn.addEventListener(
+            "click",
+            analyzeImage
         );
-
-    } finally {
-
-        setLoading(false);
-
-    }
-}
-
-
-/* =========================
-   调用 Gemini
-========================= */
-
-async function callGemini(image) {
-
-    const systemPrompt = `
+        async function analyzeImage() {
+            if (!imageDataUrl) {
+                showError("请先上传截图。");
+                return;
+            }
+            setLoading(true);
+            hideError();
+            try {
+                const result =
+                    await callGemini(imageDataUrl);
+                latestResult =
+                    result;
+                renderResult(result);
+            } catch (error) {
+                console.error(error);
+                showError(
+                    "识别失败：" +
+                    (error.message || "未知错误")
+                );
+            } finally {
+                setLoading(false);
+            }
+        }
+        /* =========================
+           调用 Gemini
+        ========================= */
+        async function callGemini(image) {
+            const systemPrompt = `
 你是一名金融截图数据识别助手。只识别图片里已经出现的数据，不要分析、不要总结、不要评价、不要给建议。
-
 要求：
 1. 准确识别截图中的文字和数字，尽可能完整。
 2. 不要修改、猜测或补全截图中没有的数据；无法确认的字段用 null。
@@ -941,9 +742,7 @@ async function callGemini(image) {
 4. 累计净值和涨跌幅只原样记录。
 5. 不要返回任何分析描述、报告、结论或比较文字。
 6. 严格返回 JSON，不要使用 Markdown，不要使用 \`\`\`json。
-
 JSON 格式：
-
 {
   "source": {
     "raw_text": "截图中识别到的完整原始文字"
@@ -969,7 +768,6 @@ JSON 格式：
   },
   "all_data": {}
 }
-
 历史净值必须使用：
 {
   "table_headers": ["日期", "单位净值", "累计净值", "涨跌幅"],
@@ -983,894 +781,612 @@ JSON 格式：
     }
   ]
 }
-
 注意：涨跌幅必须同时写入 nav_growth_rate 和 涨跌幅 两个字段，内容与截图一致。
 `;
-
-    const response =
-        await fetch(API_URL, {
-
-            method: "POST",
-
-            headers: {
-                "Content-Type":
-                    "application/json"
-            },
-
-            body: JSON.stringify({
-
-                model: MODEL,
-
-                stream: false,
-
-                temperature: 0.1,
-
-                max_tokens: 5000,
-
-                messages: [
-
-                    {
-                        role: "system",
-                        content: systemPrompt
+            const response =
+                await fetch(API_URL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/json"
                     },
-
-                    {
-                        role: "user",
-
-                        content: [
-
+                    body: JSON.stringify({
+                        model: MODEL,
+                        stream: false,
+                        temperature: 0.1,
+                        max_tokens: 5000,
+                        messages: [
                             {
-                                type: "text",
-
-                                text:
-                                    "请只识别这张截图中的数据，不要写分析或描述。"
+                                role: "system",
+                                content: systemPrompt
                             },
-
                             {
-                                type: "image_url",
-
-                                image_url: {
-                                    url: image
-                                }
-
+                                role: "user",
+                                content: [
+                                    {
+                                        type: "text",
+                                        text:
+                                            "请只识别这张截图中的数据，不要写分析或描述。"
+                                    },
+                                    {
+                                        type: "image_url",
+                                        image_url: {
+                                            url: image
+                                        }
+                                    }
+                                ]
                             }
-
                         ]
-
-                    }
-
-                ]
-
-            })
-
-        });
-
-
-    if (!response.ok) {
-
-        const text =
-            await response.text();
-
-        throw new Error(
-            `API ${response.status}: ${text.slice(0, 500)}`
-        );
-    }
-
-
-    const data =
-        await response.json();
-
-
-    const content =
-        data?.choices?.[0]?.message?.content;
-
-
-    if (!content) {
-
-        throw new Error(
-            "Gemini 没有返回有效内容。"
-        );
-    }
-
-
-    return parseGeminiJSON(content);
-}
-
-
-/* =========================
-   解析 Gemini JSON
-========================= */
-
-function parseGeminiJSON(text) {
-
-    let clean =
-        String(text).trim();
-
-    // 去掉 Markdown code fence
-    clean =
-        clean
-            .replace(/^```json\s*/i, "")
-            .replace(/^```\s*/i, "")
-            .replace(/\s*```$/i, "")
-            .trim();
-
-
-    try {
-
-        return JSON.parse(clean);
-
-    } catch (e) {
-
-        // 尝试寻找 JSON 主体
-        const start =
-            clean.indexOf("{");
-
-        const end =
-            clean.lastIndexOf("}");
-
-        if (start >= 0 && end > start) {
-
-            const jsonText =
-                clean.slice(start, end + 1);
-
-            try {
-
-                return JSON.parse(jsonText);
-
-            } catch (e2) {}
-
-        }
-
-        throw new Error(
-            "模型返回的不是有效 JSON。"
-        );
-    }
-}
-
-
-/* =========================
-   渲染结果
-========================= */
-
-function renderResult(data) {
-
-    result.style.display =
-        "block";
-
-
-    const rate1 =
-        { ...(data?.rates?.rate1 || {}) };
-
-    const rate2 =
-        { ...(data?.rates?.rate2 || {}) };
-
-    const navCalc =
-        analyzeNavHistory(data?.all_data);
-
-
-    if (navCalc) {
-
-        rate1.label =
-            "最近7天";
-
-        rate1.value =
-            navCalc.rate7?.value ?? null;
-
-        rate2.label =
-            "最近14天";
-
-        rate2.value =
-            navCalc.rate14?.value ?? null;
-
-    }
-
-
-    /* 年化收益率 */
-
-    document.getElementById(
-        "rate1Label"
-    ).textContent =
-        rate1.label ||
-        "年化收益率 1";
-
-    document.getElementById(
-        "rate2Label"
-    ).textContent =
-        rate2.label ||
-        "年化收益率 2";
-
-
-    document.getElementById(
-        "rate1"
-    ).textContent =
-        formatRate(rate1.value);
-
-    document.getElementById(
-        "rate2"
-    ).textContent =
-        formatRate(rate2.value);
-
-
-    renderHistoryTable(data?.all_data, navCalc);
-
-
-    /* 原始 JSON */
-
-    document.getElementById(
-        "rawData"
-    ).textContent =
-        JSON.stringify(
-            data,
-            null,
-            2
-        );
-
-
-    // 滚动到结果
-    setTimeout(() => {
-
-        result.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
-
-    }, 100);
-
-}
-
-
-function hasValue(value) {
-
-    return !(
-        value === null ||
-        value === undefined ||
-        value === ""
-    );
-
-}
-
-
-function parseDate(value) {
-
-    if (!value) {
-        return null;
-    }
-
-    const text =
-        String(value).trim();
-
-    const iso =
-        Date.parse(text.replace(/\./g, "-"));
-
-    if (Number.isFinite(iso)) {
-        return new Date(iso);
-    }
-
-    const match =
-        text.match(
-            /(\d{4})\D+(\d{1,2})\D+(\d{1,2})/
-        );
-
-    if (!match) {
-        return null;
-    }
-
-    return new Date(
-        Number(match[1]),
-        Number(match[2]) - 1,
-        Number(match[3])
-    );
-
-}
-
-
-function pickNav(row) {
-
-    const value =
-        row?.unit_nav ??
-        row?.accumulated_nav ??
-        row?.nav ??
-        row?.净值 ??
-        row?.单位净值;
-
-    const num =
-        Number(String(value).replace(/,/g, ""));
-
-    return Number.isFinite(num) ? num : null;
-
-}
-
-
-function dateKey(date) {
-
-    const pad =
-        n => String(n).padStart(2, "0");
-
-    return (
-        date.getFullYear() +
-        "-" +
-        pad(date.getMonth() + 1) +
-        "-" +
-        pad(date.getDate())
-    );
-
-}
-
-
-function addDays(date, days) {
-
-    const next =
-        new Date(
-            date.getFullYear(),
-            date.getMonth(),
-            date.getDate()
-        );
-
-    next.setDate(next.getDate() + days);
-
-    return next;
-
-}
-
-
-function daysBetween(start, end) {
-
-    const a =
-        new Date(
-            start.getFullYear(),
-            start.getMonth(),
-            start.getDate()
-        );
-
-    const b =
-        new Date(
-            end.getFullYear(),
-            end.getMonth(),
-            end.getDate()
-        );
-
-    return Math.round(
-        (b - a) / 86400000
-    );
-
-}
-
-
-function analyzeNavHistory(allData) {
-
-    const rows =
-        Array.isArray(allData?.historical_data)
-            ? allData.historical_data
-            : [];
-
-    const byDate =
-        new Map();
-
-    rows.forEach(row => {
-
-        const date =
-            parseDate(row?.date || row?.日期);
-
-        const nav =
-            pickNav(row);
-
-        if (!date || !Number.isFinite(nav)) {
-            return;
-        }
-
-        byDate.set(dateKey(date), {
-            row,
-            date,
-            nav
-        });
-
-    });
-
-    const series =
-        [...byDate.values()]
-            .sort((a, b) => a.date - b.date);
-
-    if (!series.length) {
-        return null;
-    }
-
-    const dailyIncomeByDate =
-        new Map();
-
-    for (let i = 1; i < series.length; i++) {
-
-        const prev =
-            series[i - 1];
-
-        const curr =
-            series[i];
-
-        const days =
-            daysBetween(prev.date, curr.date);
-
-        if (days <= 0) {
-            continue;
-        }
-
-        dailyIncomeByDate.set(
-            dateKey(curr.date),
-            (curr.nav - prev.nav) * 10000 / days
-        );
-
-    }
-
-    const latest =
-        series[series.length - 1];
-
-    return {
-        series,
-        dailyIncomeByDate,
-        latestDailyIncome:
-            dailyIncomeByDate.get(
-                dateKey(latest.date)
-            ) ?? null,
-        rate7:
-            annualizedForDays(byDate, latest, 7),
-        rate14:
-            annualizedForDays(byDate, latest, 14)
-    };
-
-}
-
-
-function annualizedForDays(byDate, latest, days) {
-
-    if (!latest || latest.nav <= 0) {
-        return null;
-    }
-
-    const start =
-        addDays(latest.date, -days);
-
-    const startItem =
-        byDate.get(dateKey(start));
-
-    if (!startItem || startItem.nav <= 0) {
-        return null;
-    }
-
-    return {
-        startDate: dateKey(start),
-        endDate: dateKey(latest.date),
-        startNav: startItem.nav,
-        endNav: latest.nav,
-        value:
-            (
-                Math.pow(
-                    latest.nav / startItem.nav,
-                    365 / days
-                ) - 1
-            ) * 100
-    };
-
-}
-
-
-function renderHistoryTable(allData, navCalc) {
-
-    const section =
-        document.getElementById("historySection");
-
-    const card =
-        document.getElementById("historyCard");
-
-    const head =
-        document.getElementById("historyHead");
-
-    const body =
-        document.getElementById("historyBody");
-
-    const rows =
-        Array.isArray(allData?.historical_data)
-            ? allData.historical_data
-            : [];
-
-    if (!rows.length) {
-
-        if (section) {
-            section.style.display =
-                "none";
-        }
-
-        card.style.display =
-            "none";
-
-        head.innerHTML =
-            "";
-
-        body.innerHTML =
-            "";
-
-        return;
-    }
-
-    const headerKeys = {
-        "日期": "date",
-        "单位净值": "unit_nav",
-        "涨跌幅": "nav_growth_rate",
-        "净值涨跌幅": "nav_growth_rate"
-    };
-
-    const headerAliases = {
-        "净值涨跌幅": "涨跌幅"
-    };
-
-    const hiddenHeaders =
-        new Set(["累计净值", "万元收益"]);
-
-    const headers =
-        (
-            Array.isArray(allData?.table_headers) &&
-            allData.table_headers.length
-                ? [...allData.table_headers]
-                : ["日期", "单位净值", "涨跌幅"]
-        )
-            .map(item => headerAliases[item] || item)
-            .filter((item, index, list) =>
-                !hiddenHeaders.has(item) &&
-                list.indexOf(item) === index
-            );
-
-    headers.push("万元收益");
-
-    const keys =
-        headers
-            .slice(0, -1)
-            .map(item => headerKeys[item] || item);
-
-    const incomeMap =
-        navCalc?.dailyIncomeByDate ||
-        new Map();
-
-    const displayRows =
-        [...rows].sort((a, b) => {
-
-            const da =
-                parseDate(a?.date || a?.日期);
-
-            const db =
-                parseDate(b?.date || b?.日期);
-
-            if (!da || !db) {
-                return 0;
+                    })
+                });
+            if (!response.ok) {
+                const text =
+                    await response.text();
+                throw new Error(
+                    `API ${response.status}: ${text.slice(0, 500)}`
+                );
             }
-
-            return db - da;
-
-        });
-
-    head.innerHTML =
-        "<tr>" +
-        headers
-            .map((item, index) =>
-                `<th${index === headers.length - 1 ? ' class="num"' : ""}>${escapeHTML(item)}</th>`
-            )
-            .join("") +
-        "</tr>";
-
-    body.innerHTML =
-        displayRows
-            .map(row => {
-
+            const data =
+                await response.json();
+            const content =
+                data?.choices?.[0]?.message?.content;
+            if (!content) {
+                throw new Error(
+                    "Gemini 没有返回有效内容。"
+                );
+            }
+            return parseGeminiJSON(content);
+        }
+        /* =========================
+           解析 Gemini JSON
+        ========================= */
+        function parseGeminiJSON(text) {
+            let clean =
+                String(text).trim();
+            // 去掉 Markdown code fence
+            clean =
+                clean
+                    .replace(/^```json\s*/i, "")
+                    .replace(/^```\s*/i, "")
+                    .replace(/\s*```$/i, "")
+                    .trim();
+            try {
+                return JSON.parse(clean);
+            } catch (e) {
+                // 尝试寻找 JSON 主体
+                const start =
+                    clean.indexOf("{");
+                const end =
+                    clean.lastIndexOf("}");
+                if (start >= 0 && end > start) {
+                    const jsonText =
+                        clean.slice(start, end + 1);
+                    try {
+                        return JSON.parse(jsonText);
+                    } catch (e2) { }
+                }
+                throw new Error(
+                    "模型返回的不是有效 JSON。"
+                );
+            }
+        }
+        /* =========================
+           渲染结果
+        ========================= */
+        function renderResult(data) {
+            result.style.display =
+                "block";
+            const rate1 =
+                { ...(data?.rates?.rate1 || {}) };
+            const rate2 =
+                { ...(data?.rates?.rate2 || {}) };
+            const navCalc =
+                analyzeNavHistory(data?.all_data);
+            if (navCalc) {
+                rate1.label =
+                    "最近7天";
+                rate1.value =
+                    navCalc.rate7?.value ?? null;
+                rate2.label =
+                    "最近14天";
+                rate2.value =
+                    navCalc.rate14?.value ?? null;
+            }
+            /* 年化收益率 */
+            document.getElementById(
+                "rate1Label"
+            ).textContent =
+                rate1.label ||
+                "年化收益率 1";
+            document.getElementById(
+                "rate2Label"
+            ).textContent =
+                rate2.label ||
+                "年化收益率 2";
+            document.getElementById(
+                "rate1"
+            ).textContent =
+                formatRate(rate1.value);
+            document.getElementById(
+                "rate2"
+            ).textContent =
+                formatRate(rate2.value);
+            renderHistoryTable(data?.all_data, navCalc);
+            /* 原始 JSON */
+            document.getElementById(
+                "rawData"
+            ).textContent =
+                JSON.stringify(
+                    data,
+                    null,
+                    2
+                );
+            // 滚动到结果
+            setTimeout(() => {
+                result.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+            }, 100);
+        }
+        function hasValue(value) {
+            return !(
+                value === null ||
+                value === undefined ||
+                value === ""
+            );
+        }
+        function parseDate(value) {
+            if (!value) {
+                return null;
+            }
+            const text =
+                String(value).trim();
+            const iso =
+                Date.parse(text.replace(/\./g, "-"));
+            if (Number.isFinite(iso)) {
+                return new Date(iso);
+            }
+            const match =
+                text.match(
+                    /(\d{4})\D+(\d{1,2})\D+(\d{1,2})/
+                );
+            if (!match) {
+                return null;
+            }
+            return new Date(
+                Number(match[1]),
+                Number(match[2]) - 1,
+                Number(match[3])
+            );
+        }
+        function pickNav(row) {
+            const value =
+                row?.unit_nav ??
+                row?.accumulated_nav ??
+                row?.nav ??
+                row?.净值 ??
+                row?.单位净值;
+            const num =
+                Number(String(value).replace(/,/g, ""));
+            return Number.isFinite(num) ? num : null;
+        }
+        function dateKey(date) {
+            const pad =
+                n => String(n).padStart(2, "0");
+            return (
+                date.getFullYear() +
+                "-" +
+                pad(date.getMonth() + 1) +
+                "-" +
+                pad(date.getDate())
+            );
+        }
+        function addDays(date, days) {
+            const next =
+                new Date(
+                    date.getFullYear(),
+                    date.getMonth(),
+                    date.getDate()
+                );
+            next.setDate(next.getDate() + days);
+            return next;
+        }
+        function daysBetween(start, end) {
+            const a =
+                new Date(
+                    start.getFullYear(),
+                    start.getMonth(),
+                    start.getDate()
+                );
+            const b =
+                new Date(
+                    end.getFullYear(),
+                    end.getMonth(),
+                    end.getDate()
+                );
+            return Math.round(
+                (b - a) / 86400000
+            );
+        }
+        function analyzeNavHistory(allData) {
+            const rows =
+                Array.isArray(allData?.historical_data)
+                    ? allData.historical_data
+                    : [];
+            const byDate =
+                new Map();
+            rows.forEach(row => {
                 const date =
                     parseDate(row?.date || row?.日期);
-
-                const key =
-                    date ? dateKey(date) : "";
-
-                const rawIncome =
-                    incomeMap.has(key)
-                        ? Number(incomeMap.get(key))
-                        : null;
-
-                const income =
-                    Number.isFinite(rawIncome)
-                        ? formatMoney(rawIncome)
-                        : "—";
-
-                const cells =
-                    keys
-                        .slice(0, headers.length - 1)
-                        .map((keyName, index) =>
-                            `<td>${escapeHTML(pickTableCell(row, keyName, headers[index]))}</td>`
-                        )
-                        .join("");
-
+                const nav =
+                    pickNav(row);
+                if (!date || !Number.isFinite(nav)) {
+                    return;
+                }
+                byDate.set(dateKey(date), {
+                    row,
+                    date,
+                    nav
+                });
+            });
+            const series =
+                [...byDate.values()]
+                    .sort((a, b) => a.date - b.date);
+            if (!series.length) {
+                return null;
+            }
+            const dailyIncomeByDate =
+                new Map();
+            for (let i = 1; i < series.length; i++) {
+                const prev =
+                    series[i - 1];
+                const curr =
+                    series[i];
+                const days =
+                    daysBetween(prev.date, curr.date);
+                if (days <= 0) {
+                    continue;
+                }
+                dailyIncomeByDate.set(
+                    dateKey(curr.date),
+                    (curr.nav - prev.nav) * 10000 / days
+                );
+            }
+            const latest =
+                series[series.length - 1];
+            return {
+                series,
+                dailyIncomeByDate,
+                latestDailyIncome:
+                    dailyIncomeByDate.get(
+                        dateKey(latest.date)
+                    ) ?? null,
+                rate7:
+                    annualizedForDays(byDate, latest, 7),
+                rate14:
+                    annualizedForDays(byDate, latest, 14)
+            };
+        }
+        function annualizedForDays(byDate, latest, days) {
+            if (!latest || latest.nav <= 0) {
+                return null;
+            }
+            const start =
+                addDays(latest.date, -days);
+            const startItem =
+                byDate.get(dateKey(start));
+            if (!startItem || startItem.nav <= 0) {
+                return null;
+            }
+            return {
+                startDate: dateKey(start),
+                endDate: dateKey(latest.date),
+                startNav: startItem.nav,
+                endNav: latest.nav,
+                value:
+                    (
+                        Math.pow(
+                            latest.nav / startItem.nav,
+                            365 / days
+                        ) - 1
+                    ) * 100
+            };
+        }
+        function renderHistoryTable(allData, navCalc) {
+            const section =
+                document.getElementById("historySection");
+            const card =
+                document.getElementById("historyCard");
+            const head =
+                document.getElementById("historyHead");
+            const body =
+                document.getElementById("historyBody");
+            const rows =
+                Array.isArray(allData?.historical_data)
+                    ? allData.historical_data
+                    : [];
+            if (!rows.length) {
+                if (section) {
+                    section.style.display =
+                        "none";
+                }
+                card.style.display =
+                    "none";
+                head.innerHTML =
+                    "";
+                body.innerHTML =
+                    "";
+                return;
+            }
+            const headerKeys = {
+                "日期": "date",
+                "单位净值": "unit_nav",
+                "涨跌幅": "nav_growth_rate",
+                "净值涨跌幅": "nav_growth_rate"
+            };
+            const headerAliases = {
+                "净值涨跌幅": "涨跌幅"
+            };
+            const hiddenHeaders =
+                new Set(["累计净值", "万元收益"]);
+            const headers =
+                (
+                    Array.isArray(allData?.table_headers) &&
+                        allData.table_headers.length
+                        ? [...allData.table_headers]
+                        : ["日期", "单位净值", "涨跌幅"]
+                )
+                    .map(item => headerAliases[item] || item)
+                    .filter((item, index, list) =>
+                        !hiddenHeaders.has(item) &&
+                        list.indexOf(item) === index
+                    );
+            headers.push("万元收益");
+            const keys =
+                headers
+                    .slice(0, -1)
+                    .map(item => headerKeys[item] || item);
+            const incomeMap =
+                navCalc?.dailyIncomeByDate ||
+                new Map();
+            const displayRows =
+                [...rows].sort((a, b) => {
+                    const da =
+                        parseDate(a?.date || a?.日期);
+                    const db =
+                        parseDate(b?.date || b?.日期);
+                    if (!da || !db) {
+                        return 0;
+                    }
+                    return db - da;
+                });
+            head.innerHTML =
+                "<tr>" +
+                headers
+                    .map((item, index) =>
+                        `<th${index === headers.length - 1 ? ' class="num"' : ""}>${escapeHTML(item)}</th>`
+                    )
+                    .join("") +
+                "</tr>";
+            body.innerHTML =
+                displayRows
+                    .map(row => {
+                        const date =
+                            parseDate(row?.date || row?.日期);
+                        const key =
+                            date ? dateKey(date) : "";
+                        const rawIncome =
+                            incomeMap.has(key)
+                                ? Number(incomeMap.get(key))
+                                : null;
+                        const income =
+                            Number.isFinite(rawIncome)
+                                ? formatMoney(rawIncome)
+                                : "—";
+                        const cells =
+                            keys
+                                .slice(0, headers.length - 1)
+                                .map((keyName, index) =>
+                                    `<td>${escapeHTML(pickTableCell(row, keyName, headers[index]))}</td>`
+                                )
+                                .join("");
+                        const bar =
+                            incomeBarStyle(rawIncome);
+                        return `<tr${bar}>${cells}<td class="num">${income}</td></tr>`;
+                    })
+                    .join("");
+            if (section) {
+                section.style.display =
+                    "block";
+            }
+            card.style.display =
+                "block";
+            requestAnimationFrame(() => {
+                paintIncomeBars(body);
+            });
+        }
+        function pickTableCell(row, keyName, header) {
+            const aliases = {
+                date: ["date", "日期"],
+                unit_nav: ["unit_nav", "单位净值", "nav", "净值"],
+                nav_growth_rate: [
+                    "nav_growth_rate",
+                    "涨跌幅",
+                    "净值涨跌幅",
+                    "growth_rate"
+                ]
+            };
+            const names =
+                aliases[keyName] ||
+                [keyName, header];
+            for (const name of names) {
+                const value =
+                    row?.[name];
+                if (
+                    value !== null &&
+                    value !== undefined &&
+                    value !== ""
+                ) {
+                    return value;
+                }
+            }
+            return "";
+        }
+        function incomeBarStyle(value) {
+            if (!Number.isFinite(value) || value <= 0) {
+                return "";
+            }
+            if (value >= 1) {
+                return ' class="income-full"';
+            }
+            const percent =
+                Math.min(100, value * 100);
+            return ` class="income-bar" style="--bar:${percent}%"`;
+        }
+        function paintIncomeBars(body) {
+            const rows =
+                body.querySelectorAll("tr.income-bar");
+            rows.forEach(tr => {
                 const bar =
-                    incomeBarStyle(rawIncome);
-
-                return `<tr${bar}>${cells}<td class="num">${income}</td></tr>`;
-
-            })
-            .join("");
-
-    if (section) {
-        section.style.display =
-            "block";
-    }
-
-    card.style.display =
-        "block";
-
-    requestAnimationFrame(() => {
-        paintIncomeBars(body);
-    });
-
-}
-
-
-function pickTableCell(row, keyName, header) {
-
-    const aliases = {
-        date: ["date", "日期"],
-        unit_nav: ["unit_nav", "单位净值", "nav", "净值"],
-        nav_growth_rate: [
-            "nav_growth_rate",
-            "涨跌幅",
-            "净值涨跌幅",
-            "growth_rate"
-        ]
-    };
-
-    const names =
-        aliases[keyName] ||
-        [keyName, header];
-
-    for (const name of names) {
-
-        const value =
-            row?.[name];
-
-        if (
-            value !== null &&
-            value !== undefined &&
-            value !== ""
-        ) {
-            return value;
+                    getComputedStyle(tr)
+                        .getPropertyValue("--bar")
+                        .trim() || "0%";
+                const tableWidth =
+                    tr.getBoundingClientRect().width;
+                [...tr.children].forEach(td => {
+                    td.style.backgroundImage =
+                        `linear-gradient(to right, #dcfce7 ${bar}, #ffffff ${bar})`;
+                    td.style.backgroundSize =
+                        `${tableWidth}px 100%`;
+                    td.style.backgroundPosition =
+                        `-${td.offsetLeft}px 0`;
+                    td.style.backgroundRepeat =
+                        "no-repeat";
+                });
+            });
         }
-
-    }
-
-    return "";
-
-}
-
-
-function incomeBarStyle(value) {
-
-    if (!Number.isFinite(value) || value <= 0) {
-        return "";
-    }
-
-    if (value >= 1) {
-        return ' class="income-full"';
-    }
-
-    const percent =
-        Math.min(100, value * 100);
-
-    return ` class="income-bar" style="--bar:${percent}%"`;
-
-}
-
-
-function paintIncomeBars(body) {
-
-    const rows =
-        body.querySelectorAll("tr.income-bar");
-
-    rows.forEach(tr => {
-
-        const bar =
-            getComputedStyle(tr)
-                .getPropertyValue("--bar")
-                .trim() || "0%";
-
-        const tableWidth =
-            tr.getBoundingClientRect().width;
-
-        [...tr.children].forEach(td => {
-
-            td.style.backgroundImage =
-                `linear-gradient(to right, #dcfce7 ${bar}, #ffffff ${bar})`;
-
-            td.style.backgroundSize =
-                `${tableWidth}px 100%`;
-
-            td.style.backgroundPosition =
-                `-${td.offsetLeft}px 0`;
-
-            td.style.backgroundRepeat =
-                "no-repeat";
-
+        window.addEventListener("resize", () => {
+            const body =
+                document.getElementById("historyBody");
+            if (body) {
+                paintIncomeBars(body);
+            }
         });
-
-    });
-
-}
-
-
-window.addEventListener("resize", () => {
-
-    const body =
-        document.getElementById("historyBody");
-
-    if (body) {
-        paintIncomeBars(body);
-    }
-
-});
-
-
-function formatRate(value) {
-
-    if (
-        value === null ||
-        value === undefined ||
-        value === ""
-    ) {
-        return "--";
-    }
-
-    const num =
-        Number(value);
-
-    if (!Number.isFinite(num)) {
-        return String(value);
-    }
-
-    return `${num.toLocaleString("zh-CN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    })}%`;
-}
-
-
-function formatMoney(value) {
-
-    const num =
-        Number(value);
-
-    if (!Number.isFinite(num)) {
-        return "—";
-    }
-
-    return num.toLocaleString(
-        "zh-CN",
-        {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
+        function formatRate(value) {
+            if (
+                value === null ||
+                value === undefined ||
+                value === ""
+            ) {
+                return "--";
+            }
+            const num =
+                Number(value);
+            if (!Number.isFinite(num)) {
+                return String(value);
+            }
+            return `${num.toLocaleString("zh-CN", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            })}%`;
         }
-    );
-}
-
-
-function formatNumber(value) {
-
-    const num =
-        Number(value);
-
-    if (!Number.isFinite(num)) {
-        return String(value);
-    }
-
-    return num.toLocaleString(
-        "zh-CN",
-        {
-            maximumFractionDigits: 6
-        }
-    );
-}
-
-
-/* =========================
-   HTML 转义
-========================= */
-
-function escapeHTML(value) {
-
-    return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-
-}
-
-
-/* =========================
-   复制原始 JSON
-========================= */
-
-document.getElementById(
-    "copyBtn"
-).addEventListener(
-    "click",
-    async () => {
-
-        if (!latestResult) {
-            return;
-        }
-
-        const text =
-            JSON.stringify(
-                latestResult,
-                null,
-                2
+        function formatMoney(value) {
+            const num =
+                Number(value);
+            if (!Number.isFinite(num)) {
+                return "—";
+            }
+            return num.toLocaleString(
+                "zh-CN",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
             );
-
-        try {
-
-            await navigator.clipboard.writeText(text);
-
-            const btn =
-                document.getElementById("copyBtn");
-
-            btn.textContent =
-                "已复制";
-
-            setTimeout(() => {
-                btn.textContent =
-                    "复制 JSON";
-            }, 1500);
-
-        } catch (error) {
-
-            showError(
-                "复制失败，请手动选择 JSON。"
-            );
-
         }
-
-    }
-);
-
-
-/* =========================
-   UI 状态
-========================= */
-
-function setLoading(status) {
-
-    loading.style.display =
-        status ? "block" : "none";
-
-    analyzeBtn.disabled =
-        status || !imageDataUrl;
-
-    analyzeBtn.textContent =
-        status
-            ? "正在分析…"
-            : "开始识别并分析";
-
-}
-
-
-function showError(message) {
-
-    errorBox.textContent =
-        message;
-
-    errorBox.style.display =
-        "block";
-
-}
-
-
-function hideError() {
-
-    errorBox.style.display =
-        "none";
-
-}
-
-</script>
-
+        function formatNumber(value) {
+            const num =
+                Number(value);
+            if (!Number.isFinite(num)) {
+                return String(value);
+            }
+            return num.toLocaleString(
+                "zh-CN",
+                {
+                    maximumFractionDigits: 6
+                }
+            );
+        }
+        /* =========================
+           HTML 转义
+        ========================= */
+        function escapeHTML(value) {
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+        /* =========================
+           复制原始 JSON
+        ========================= */
+        document.getElementById(
+            "copyBtn"
+        ).addEventListener(
+            "click",
+            async () => {
+                if (!latestResult) {
+                    return;
+                }
+                const text =
+                    JSON.stringify(
+                        latestResult,
+                        null,
+                        2
+                    );
+                try {
+                    await navigator.clipboard.writeText(text);
+                    const btn =
+                        document.getElementById("copyBtn");
+                    btn.textContent =
+                        "已复制";
+                    setTimeout(() => {
+                        btn.textContent =
+                            "复制 JSON";
+                    }, 1500);
+                } catch (error) {
+                    showError(
+                        "复制失败，请手动选择 JSON。"
+                    );
+                }
+            }
+        );
+        /* =========================
+           UI 状态
+        ========================= */
+        function setLoading(status) {
+            loading.style.display =
+                status ? "block" : "none";
+            analyzeBtn.disabled =
+                status || !imageDataUrl;
+            analyzeBtn.textContent =
+                status
+                    ? "正在分析…"
+                    : "开始识别并分析";
+        }
+        function showError(message) {
+            errorBox.textContent =
+                message;
+            errorBox.style.display =
+                "block";
+        }
+        function hideError() {
+            errorBox.style.display =
+                "none";
+        }
+    </script>
 </body>
+
 </html>
