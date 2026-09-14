@@ -291,8 +291,9 @@ button {
 }
 
 .rate-label {
-    color: var(--muted);
+    color: var(--text);
     font-size: 14px;
+    font-weight: 700;
 }
 
 .rate-value {
@@ -311,12 +312,6 @@ button {
     color: var(--green);
 }
 
-.rate-detail {
-    margin-top: 9px;
-    color: var(--muted);
-    font-size: 13px;
-}
-
 /* Report */
 
 .report-card {
@@ -328,85 +323,11 @@ button {
 }
 
 .report-inner {
-    padding: 30px;
-}
-
-.report-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 20px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid var(--border);
-}
-
-.report-title {
-    font-size: 24px;
-    font-weight: 850;
-}
-
-.report-time {
-    color: var(--muted);
-    font-size: 12px;
-    margin-top: 5px;
-}
-
-.summary {
-    margin-top: 22px;
-    padding: 18px;
-    border-radius: 15px;
-    background: #faf6f6;
-    line-height: 1.8;
-    white-space: pre-wrap;
-}
-
-.analysis {
-    margin-top: 20px;
-    line-height: 1.9;
-    font-size: 15px;
-}
-
-.analysis strong {
-    color: var(--text);
-}
-
-/* Daily income */
-
-.daily-card {
-    margin-top: 20px;
-    background: linear-gradient(135deg, #fff7ed, #ffffff);
-    border: 1px solid #fed7aa;
-    border-radius: 18px;
-    padding: 22px;
-}
-
-.daily-title {
-    font-size: 16px;
-    font-weight: 800;
-    color: #9a3412;
-}
-
-.daily-value {
-    margin-top: 8px;
-    font-size: 34px;
-    font-weight: 850;
-    color: var(--orange);
-}
-
-.daily-desc {
-    color: var(--muted);
-    font-size: 13px;
-    margin-top: 5px;
+    padding: 20px;
 }
 
 .history-card {
-    margin-top: 20px;
-}
-
-.history-title {
-    font-size: 16px;
-    font-weight: 800;
-    margin-bottom: 12px;
+    margin-top: 0;
 }
 
 .history-table-wrap {
@@ -417,7 +338,8 @@ button {
 
 .history-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     font-size: 13px;
 }
 
@@ -427,6 +349,7 @@ button {
     text-align: left;
     border-bottom: 1px solid var(--border);
     white-space: nowrap;
+    background-color: transparent;
 }
 
 .history-table th {
@@ -442,6 +365,22 @@ button {
 .history-table .num {
     text-align: right;
     font-variant-numeric: tabular-nums;
+}
+
+.history-table tbody tr {
+    background-color: #fff;
+}
+
+.history-table tbody tr.income-full td {
+    background-color: #dcfce7;
+}
+
+.history-table tbody tr.income-bar {
+    background-image: linear-gradient(
+        to right,
+        #dcfce7 var(--bar),
+        #ffffff var(--bar)
+    );
 }
 
 /* Raw data */
@@ -538,28 +477,20 @@ pre {
     }
 
     .rate-grid {
-        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .rate-card {
+        padding: 16px 12px;
+        border-radius: 16px;
     }
 
     .rate-value {
-        font-size: 34px;
+        font-size: 26px;
     }
 
     .report-inner {
-        padding: 20px;
-    }
-
-    .report-header {
-        display: block;
-    }
-
-    .report-header .secondary-btn {
-        margin-top: 14px;
-        width: 100%;
-    }
-
-    .daily-value {
-        font-size: 30px;
+        padding: 14px;
     }
 }
 </style>
@@ -672,7 +603,7 @@ pre {
         >
 
             <div class="section-title">
-                核心收益率
+                近期收益率
             </div>
 
             <div class="rate-grid">
@@ -690,11 +621,6 @@ pre {
                         --
                     </div>
 
-                    <div
-                        class="rate-detail"
-                        id="rate1Detail"
-                    ></div>
-
                 </div>
 
                 <div class="rate-card">
@@ -710,19 +636,16 @@ pre {
                         --
                     </div>
 
-                    <div
-                        class="rate-detail"
-                        id="rate2Detail"
-                    ></div>
-
                 </div>
 
             </div>
 
 
-            <!-- 报告 -->
+            <!-- 历史净值 -->
+            <div id="historySection">
+
             <div class="section-title">
-                分析报告
+                历史净值
             </div>
 
             <div
@@ -732,72 +655,11 @@ pre {
 
                 <div class="report-inner">
 
-                    <div class="report-header">
-
-                        <div>
-                            <div class="report-title">
-                                收益情况分析
-                            </div>
-
-                            <div
-                                class="report-time"
-                                id="reportTime"
-                            ></div>
-                        </div>
-
-                        <button
-                            class="secondary-btn"
-                            id="exportBtn"
-                        >
-                            导出报告图片
-                        </button>
-
-                    </div>
-
-
-                    <div
-                        class="summary"
-                        id="summary"
-                    ></div>
-
-
-                    <div
-                        class="analysis"
-                        id="analysis"
-                    ></div>
-
-
-                    <!-- 每日万元收益 -->
-                    <div class="daily-card">
-
-                        <div class="daily-title">
-                            每日万元收益
-                        </div>
-
-                        <div
-                            class="daily-value"
-                            id="dailyIncome"
-                        >
-                            --
-                        </div>
-
-                        <div
-                            class="daily-desc"
-                            id="dailyIncomeDesc"
-                        ></div>
-
-                    </div>
-
-
                     <div
                         class="history-card"
                         id="historyCard"
                         style="display:none"
                     >
-
-                        <div class="history-title">
-                            历史净值
-                        </div>
 
                         <div class="history-table-wrap">
                             <table class="history-table">
@@ -809,6 +671,8 @@ pre {
                     </div>
 
                 </div>
+
+            </div>
 
             </div>
 
@@ -850,9 +714,6 @@ pre {
 
 </div>
 
-
-<!-- html2canvas：用于把报告导出成图片 -->
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <script>
 
@@ -1061,93 +922,59 @@ async function analyzeImage() {
 async function callGemini(image) {
 
     const systemPrompt = `
-你是一名专业的金融数据截图识别与收益分析助手。
+你是一名金融截图数据识别助手。只识别图片里已经出现的数据，不要分析、不要总结、不要评价、不要给建议。
 
-用户会上传一张包含收益率、利率、收益金额、产品信息等内容的截图。
-
-你的任务：
-
-1. 准确识别截图中的所有文字和数字。
-2. 原始识别内容必须尽可能完整，不允许为了简洁而丢失数据。
-3. 不要擅自修改、猜测或补全截图中没有出现的数据。
-4. 如果某个字段无法确认，使用 null，并说明原因。
-5. 如果截图是历史净值表，必须完整提取每一行的日期和单位净值，精度与截图一致，不要根据涨跌幅反推净值。
-6. 忽略截图自带的涨跌幅计算；累计净值和涨跌幅仅原样记录，不用于收益计算。
-7. 不要猜测或补全截图中没有出现的净值。
-8. 如果截图直接给出了年化收益率，再识别两个最重要的年化收益率。
-9. 自动生成简洁、客观的中文分析报告。
-10. 不要把金融产品风险夸大，也不要给出买卖建议。
-11. 所有金额和百分比必须尽量保留截图原始精度。
-
-必须严格返回 JSON，不要使用 Markdown，不要使用 \`\`\`json。
+要求：
+1. 准确识别截图中的文字和数字，尽可能完整。
+2. 不要修改、猜测或补全截图中没有的数据；无法确认的字段用 null。
+3. 历史净值表必须逐行提取日期、单位净值和涨跌幅，数字精度与截图一致，不要用涨跌幅反推净值。
+4. 累计净值和涨跌幅只原样记录。
+5. 不要返回任何分析描述、报告、结论或比较文字。
+6. 严格返回 JSON，不要使用 Markdown，不要使用 \`\`\`json。
 
 JSON 格式：
 
 {
   "source": {
-    "raw_text": "截图中识别到的完整原始文字，尽可能逐字完整保留",
-    "image_description": "对截图内容的简短描述"
+    "raw_text": "截图中识别到的完整原始文字"
   },
-
   "product": {
     "name": null,
     "type": null,
-    "institution": null,
-    "other": {}
+    "institution": null
   },
-
   "rates": {
     "rate1": {
-      "label": "第一个年化收益率的原始名称",
+      "label": null,
       "value": null,
       "unit": "%",
-      "original_text": null,
-      "daily_income_per_10000": null
+      "original_text": null
     },
-
     "rate2": {
-      "label": "第二个年化收益率的原始名称",
+      "label": null,
       "value": null,
       "unit": "%",
-      "original_text": null,
-      "daily_income_per_10000": null
+      "original_text": null
     }
   },
-
-  "income": {
-    "daily_income_per_10000": null,
-    "daily_income_source": "screenshot 或 calculated",
-    "calculation": null
-  },
-
-  "all_data": {},
-
-  "analysis": {
-    "summary": "一句话总结",
-    "details": "详细分析报告",
-    "comparison": "两个年化收益率的比较",
-    "conclusion": "最终结论"
-  }
+  "all_data": {}
 }
 
-特别注意：
+历史净值必须使用：
+{
+  "table_headers": ["日期", "单位净值", "累计净值", "涨跌幅"],
+  "historical_data": [
+    {
+      "date": "YYYY-MM-DD",
+      "unit_nav": "1.029767",
+      "accumulated_nav": "1.029767",
+      "nav_growth_rate": "0.00%",
+      "涨跌幅": "0.00%"
+    }
+  ]
+}
 
-- 历史净值必须逐行完整提取，不允许漏行。
-- 单位净值必须使用截图原始数字，不要四舍五入。
-- rates 和 income 可以由前端根据净值重新计算，允许为 null。
-- all_data 若存在历史净值，必须使用：
-  {
-    "table_headers": ["日期", "单位净值", "累计净值", "净值涨跌幅"],
-    "historical_data": [
-      {
-        "date": "YYYY-MM-DD",
-        "unit_nav": "1.029767",
-        "accumulated_nav": "1.029767",
-        "nav_growth_rate": "0.00%"
-      }
-    ]
-  }
-- source.raw_text 必须保留完整原始识别文字。
+注意：涨跌幅必须同时写入 nav_growth_rate 和 涨跌幅 两个字段，内容与截图一致。
 `;
 
     const response =
@@ -1186,7 +1013,7 @@ JSON 格式：
                                 type: "text",
 
                                 text:
-                                    "请识别并分析下面这张收益截图。"
+                                    "请只识别这张截图中的数据，不要写分析或描述。"
                             },
 
                             {
@@ -1307,9 +1134,6 @@ function renderResult(data) {
     const rate2 =
         { ...(data?.rates?.rate2 || {}) };
 
-    const income =
-        { ...(data?.income || {}) };
-
     const navCalc =
         analyzeNavHistory(data?.all_data);
 
@@ -1322,27 +1146,11 @@ function renderResult(data) {
         rate1.value =
             navCalc.rate7?.value ?? null;
 
-        rate1.original_text =
-            navCalc.rate7
-                ? `${navCalc.rate7.startDate} 至 ${navCalc.rate7.endDate}`
-                : "缺少起始净值，无法计算";
-
         rate2.label =
             "最近14天";
 
         rate2.value =
             navCalc.rate14?.value ?? null;
-
-        rate2.original_text =
-            navCalc.rate14
-                ? `${navCalc.rate14.startDate} 至 ${navCalc.rate14.endDate}`
-                : "缺少起始净值，无法计算";
-
-        income.daily_income_per_10000 =
-            navCalc.latestDailyIncome;
-
-        income.calculation =
-            "最新净值日折算";
 
     }
 
@@ -1373,61 +1181,6 @@ function renderResult(data) {
         formatRate(rate2.value);
 
 
-    document.getElementById(
-        "rate1Detail"
-    ).textContent =
-        rate1.original_text || "";
-
-    document.getElementById(
-        "rate2Detail"
-    ).textContent =
-        rate2.original_text || "";
-
-
-    /* 摘要 */
-
-    const analysis =
-        data?.analysis || {};
-
-    const product =
-        data?.product || {};
-
-
-    document.getElementById(
-        "summary"
-    ).textContent =
-        analysis.summary ||
-        "暂无摘要。";
-
-
-    /* 详细分析 */
-
-    document.getElementById(
-        "analysis"
-    ).innerHTML =
-        buildAnalysisHTML(analysis);
-
-
-    /* 每万元每日收益 */
-
-    const daily =
-        income.daily_income_per_10000;
-
-    document.getElementById(
-        "dailyIncome"
-    ).textContent =
-        daily == null
-            ? "--"
-            : `${formatMoney(daily)} 元`;
-
-
-    document.getElementById(
-        "dailyIncomeDesc"
-    ).textContent =
-        income.calculation ||
-        "按照截图中的收益率数据计算";
-
-
     renderHistoryTable(data?.all_data, navCalc);
 
 
@@ -1441,12 +1194,6 @@ function renderResult(data) {
             null,
             2
         );
-
-
-    document.getElementById(
-        "reportTime"
-    ).textContent =
-        `${product.name || "收益数据"} · ${new Date().toLocaleString("zh-CN")}`;
 
 
     // 滚动到结果
@@ -1696,6 +1443,9 @@ function annualizedForDays(byDate, latest, days) {
 
 function renderHistoryTable(allData, navCalc) {
 
+    const section =
+        document.getElementById("historySection");
+
     const card =
         document.getElementById("historyCard");
 
@@ -1712,6 +1462,11 @@ function renderHistoryTable(allData, navCalc) {
 
     if (!rows.length) {
 
+        if (section) {
+            section.style.display =
+                "none";
+        }
+
         card.style.display =
             "none";
 
@@ -1724,22 +1479,39 @@ function renderHistoryTable(allData, navCalc) {
         return;
     }
 
+    const headerKeys = {
+        "日期": "date",
+        "单位净值": "unit_nav",
+        "涨跌幅": "nav_growth_rate",
+        "净值涨跌幅": "nav_growth_rate"
+    };
+
+    const headerAliases = {
+        "净值涨跌幅": "涨跌幅"
+    };
+
+    const hiddenHeaders =
+        new Set(["累计净值", "万元收益"]);
+
     const headers =
         (
             Array.isArray(allData?.table_headers) &&
             allData.table_headers.length
                 ? [...allData.table_headers]
-                : ["日期", "单位净值", "累计净值", "净值涨跌幅"]
-        ).filter(item => item !== "万元收益");
+                : ["日期", "单位净值", "涨跌幅"]
+        )
+            .map(item => headerAliases[item] || item)
+            .filter((item, index, list) =>
+                !hiddenHeaders.has(item) &&
+                list.indexOf(item) === index
+            );
 
     headers.push("万元收益");
 
-    const keys = [
-        "date",
-        "unit_nav",
-        "accumulated_nav",
-        "nav_growth_rate"
-    ];
+    const keys =
+        headers
+            .slice(0, -1)
+            .map(item => headerKeys[item] || item);
 
     const incomeMap =
         navCalc?.dailyIncomeByDate ||
@@ -1781,28 +1553,148 @@ function renderHistoryTable(allData, navCalc) {
                 const key =
                     date ? dateKey(date) : "";
 
-                const income =
+                const rawIncome =
                     incomeMap.has(key)
-                        ? formatMoney(incomeMap.get(key))
+                        ? Number(incomeMap.get(key))
+                        : null;
+
+                const income =
+                    Number.isFinite(rawIncome)
+                        ? formatMoney(rawIncome)
                         : "—";
 
                 const cells =
                     keys
                         .slice(0, headers.length - 1)
-                        .map(keyName =>
-                            `<td>${escapeHTML(row?.[keyName] ?? "")}</td>`
+                        .map((keyName, index) =>
+                            `<td>${escapeHTML(pickTableCell(row, keyName, headers[index]))}</td>`
                         )
                         .join("");
 
-                return `<tr>${cells}<td class="num">${income}</td></tr>`;
+                const bar =
+                    incomeBarStyle(rawIncome);
+
+                return `<tr${bar}>${cells}<td class="num">${income}</td></tr>`;
 
             })
             .join("");
 
+    if (section) {
+        section.style.display =
+            "block";
+    }
+
     card.style.display =
         "block";
 
+    requestAnimationFrame(() => {
+        paintIncomeBars(body);
+    });
+
 }
+
+
+function pickTableCell(row, keyName, header) {
+
+    const aliases = {
+        date: ["date", "日期"],
+        unit_nav: ["unit_nav", "单位净值", "nav", "净值"],
+        nav_growth_rate: [
+            "nav_growth_rate",
+            "涨跌幅",
+            "净值涨跌幅",
+            "growth_rate"
+        ]
+    };
+
+    const names =
+        aliases[keyName] ||
+        [keyName, header];
+
+    for (const name of names) {
+
+        const value =
+            row?.[name];
+
+        if (
+            value !== null &&
+            value !== undefined &&
+            value !== ""
+        ) {
+            return value;
+        }
+
+    }
+
+    return "";
+
+}
+
+
+function incomeBarStyle(value) {
+
+    if (!Number.isFinite(value) || value <= 0) {
+        return "";
+    }
+
+    if (value >= 1) {
+        return ' class="income-full"';
+    }
+
+    const percent =
+        Math.min(100, value * 100);
+
+    return ` class="income-bar" style="--bar:${percent}%"`;
+
+}
+
+
+function paintIncomeBars(body) {
+
+    const rows =
+        body.querySelectorAll("tr.income-bar");
+
+    rows.forEach(tr => {
+
+        const bar =
+            getComputedStyle(tr)
+                .getPropertyValue("--bar")
+                .trim() || "0%";
+
+        const tableWidth =
+            tr.getBoundingClientRect().width;
+
+        [...tr.children].forEach(td => {
+
+            td.style.backgroundImage =
+                `linear-gradient(to right, #dcfce7 ${bar}, #ffffff ${bar})`;
+
+            td.style.backgroundSize =
+                `${tableWidth}px 100%`;
+
+            td.style.backgroundPosition =
+                `-${td.offsetLeft}px 0`;
+
+            td.style.backgroundRepeat =
+                "no-repeat";
+
+        });
+
+    });
+
+}
+
+
+window.addEventListener("resize", () => {
+
+    const body =
+        document.getElementById("historyBody");
+
+    if (body) {
+        paintIncomeBars(body);
+    }
+
+});
 
 
 function formatRate(value) {
@@ -1863,38 +1755,6 @@ function formatNumber(value) {
             maximumFractionDigits: 6
         }
     );
-}
-
-
-function buildAnalysisHTML(analysis) {
-
-    const parts = [];
-
-    if (analysis.details) {
-
-        parts.push(
-            `<p>${escapeHTML(analysis.details)}</p>`
-        );
-
-    }
-
-    if (analysis.comparison) {
-
-        parts.push(
-            `<p><strong>收益率比较：</strong>${escapeHTML(analysis.comparison)}</p>`
-        );
-
-    }
-
-    if (analysis.conclusion) {
-
-        parts.push(
-            `<p><strong>结论：</strong>${escapeHTML(analysis.conclusion)}</p>`
-        );
-
-    }
-
-    return parts.join("");
 }
 
 
@@ -1960,112 +1820,6 @@ document.getElementById(
 
     }
 );
-
-
-/* =========================
-   导出报告图片
-========================= */
-
-document.getElementById(
-    "exportBtn"
-).addEventListener(
-    "click",
-    async () => {
-
-        const card =
-            document.getElementById(
-                "reportCard"
-            );
-
-        if (!window.html2canvas) {
-
-            showError(
-                "图片导出组件加载失败，请检查网络。"
-            );
-
-            return;
-        }
-
-
-        const button =
-            document.getElementById(
-                "exportBtn"
-            );
-
-        button.textContent =
-            "正在生成…";
-
-        button.disabled =
-            true;
-
-
-        try {
-
-            const canvas =
-                await html2canvas(
-                    card,
-                    {
-                        scale: 2,
-                        backgroundColor:
-                            "#ffffff",
-                        useCORS: true,
-                        logging: false
-                    }
-                );
-
-
-            const link =
-                document.createElement("a");
-
-            link.download =
-                `收益分析报告-${formatDate()}.png`;
-
-            link.href =
-                canvas.toDataURL(
-                    "image/png"
-                );
-
-            link.click();
-
-        } catch (error) {
-
-            console.error(error);
-
-            showError(
-                "报告图片生成失败。"
-            );
-
-        } finally {
-
-            button.textContent =
-                "导出报告图片";
-
-            button.disabled =
-                false;
-
-        }
-
-    }
-);
-
-
-function formatDate() {
-
-    const d =
-        new Date();
-
-    const pad =
-        n => String(n).padStart(2, "0");
-
-    return (
-        d.getFullYear() +
-        pad(d.getMonth() + 1) +
-        pad(d.getDate()) +
-        "-" +
-        pad(d.getHours()) +
-        pad(d.getMinutes())
-    );
-}
 
 
 /* =========================
