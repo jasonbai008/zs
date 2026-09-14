@@ -275,9 +275,12 @@ button {
 .rate-card {
     position: relative;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     background: white;
     border-radius: 20px;
-    padding: 24px;
+    padding: 20px 22px;
     box-shadow: var(--shadow);
     border: 1px solid var(--border);
 }
@@ -294,14 +297,17 @@ button {
     color: var(--text);
     font-size: 14px;
     font-weight: 700;
+    flex-shrink: 0;
 }
 
 .rate-value {
-    margin-top: 7px;
-    font-size: 38px;
-    line-height: 1.1;
+    flex: 1;
+    margin: 0;
+    font-size: 42px;
+    line-height: 1;
     font-weight: 850;
     letter-spacing: -1px;
+    text-align: center;
 }
 
 .rate-card:first-child .rate-value {
@@ -363,7 +369,7 @@ button {
 }
 
 .history-table .num {
-    text-align: right;
+    text-align: left;
     font-variant-numeric: tabular-nums;
 }
 
@@ -481,12 +487,16 @@ pre {
     }
 
     .rate-card {
-        padding: 16px 12px;
+        padding: 14px 12px;
         border-radius: 16px;
     }
 
+    .rate-label {
+        font-size: 13px;
+    }
+
     .rate-value {
-        font-size: 26px;
+        font-size: 30px;
     }
 
     .report-inner {
